@@ -1,5 +1,5 @@
-import { loadUser } from '../user';
-import { httpGet } from '../http';
+import getLevel from '../user';
+import fetchData from '../http';
 
 jest.mock('../http');
 
@@ -8,9 +8,23 @@ beforeEach(() => {
 });
 
 test('should call loadUser once', () => {
-  httpGet.mockReturnValue(JSON.stringify({}));
+  fetchData.mockReturnValue({
+    status: 'ok',
+    level: 123,
+  });
 
-  const response = loadUser(1);
-  expect(response).toEqual({});
-  expect(httpGet).toBeCalledWith('http://server:8080/users/1');
+  const res = getLevel(456);
+
+  expect(res).toBe('Ваш текущий уровень: 123');
+});
+
+test('should call loadUser once', () => {
+  fetchData.mockReturnValue({
+    status: 'false',
+    level: 123,
+  });
+
+  const res = getLevel(456);
+
+  expect(res).toBe('Информация об уровне временно недоступна');
 });

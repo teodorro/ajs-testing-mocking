@@ -1,11 +1,12 @@
-import { httpGet } from './http';
+import fetchData from './http';
 
-export function loadUser(id) {
-  const data = httpGet(`http://server:8080/users/${id}`);
-  return JSON.parse(data);
-}
+export default function getLevel(userId) {
+  const response = fetchData(`https://server/user/${userId}`);
 
-// eslint-disable-next-line no-unused-vars
-export function saveUser(user) {
-  throw new Error('Unimplemented');
+  // TODO: логика обработки
+  if (response.status === 'ok') {
+    return `Ваш текущий уровень: ${response.level}`;
+  }
+
+  return 'Информация об уровне временно недоступна';
 }
